@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>生日快乐 · Happy Birthday</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      color: #f9fafb;
+      overflow: hidden;
+      background: radial-gradient(circle at top, #0f172a 0, #020617 45%, #020617 100%);
+    }
+
+    /* 动态渐变背景（酷炫一点） */
+    .animated-bg {
+      position: fixed;
+      inset: -20%;
+      background:
+        radial-gradient(circle at 10% 20%, rgba(96,165,250,0.35) 0, transparent 50%),
+        radial-gradient(circle at 80% 10%, rgba(244,114,182,0.35) 0, transparent 55%),
+        radial-gradient(circle at 50% 90%, rgba(251,191,36,0.28) 0, transparent 55%);
+      filter: blur(8px);
+      opacity: 0.85;
+      z-index: 0;
+      animation: bgMove 20s ease-in-out infinite alternate;
+    }
+
+    @keyframes bgMove {
+      0% {
+        transform: translate3d(0,0,0) scale(1);
+      }
+      100% {
+        transform: translate3d(-20px,10px,0) scale(1.04);
+      }
+    }
+
+    .stars-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.4) 0, transparent 50%),
+        radial-gradient(1px 1px at 80% 30%, rgba(255,255,255,0.35) 0, transparent 55%),
+        radial-gradient(1px 1px at 20% 80%, rgba(255,255,255,0.3) 0, transparent 50%),
+        radial-gradient(1px 1px at 70% 75%, rgba(255,255,255,0.35) 0, transparent 50%);
+      opacity: 0.7;
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 20px 16px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card {
+      position: relative;
+      width: 100%;
+      background: radial-gradient(circle at top left, rgba(56,189,248,0.22), transparent 55%),
+                  radial-gradient(circle at bottom right, rgba(251,113,133,0.16), transparent 55%),
+                  rgba(15,23,42,0.86);
+      border-radius: 28px;
+      box-shadow:
+        0 0 0 1px rgba(148,163,184,0.24),
+        0 24px 60px rgba(15,23,42,0.8);
+      padding: 22px 20px 20px;
+      backdrop-filter: blur(18px);
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: minmax(0, 3.2fr) minmax(0, 2.8fr);
+      gap: 16px;
+    }
+
+    @media (max-width: 768px) {
+      .card {
+        grid-template-columns: 1fr;
+        padding: 20px 16px 18px;
+        border-radius: 22px;
+      }
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -30%;
+      background:
+        radial-gradient(circle at 10% 10%, rgba(56,189,248,0.16) 0, transparent 50%),
+        radial-gradient(circle at 90% 90%, rgba(248,113,113,0.12) 0, transparent 50%);
+      opacity: 0.7;
+      mix-blend-mode: overlay;
+      pointer-events: none;
+    }
+
+    .card-left, .card-right {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* 左侧文字区域 */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 11px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: #a5b4fc;
+      background: rgba(30,64,175,0.7);
+      box-shadow: 0 0 0 1px rgba(129,140,248,0.35);
+      margin-bottom: 12px;
+    }
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #f97316;
+      box-shadow: 0 0 0 4px rgba(248, 171, 85, 0.4);
+    }
+
+    .pre-title {
+      font-size: 13px;
+      color: #9ca3af;
+      margin-bottom: 4px;
+    }
+
+    .title {
+      font-size: clamp(28px, 4.1vw, 36px);
+      line-height: 1.2;
+      margin-bottom: 8px;
+      font-weight: 800;
+      letter-spacing: 0.03em;
+      text-shadow:
+        0 0 18px rgba(96,165,250,0.7),
+        0 0 38px rgba(59,130,246,0.7);
+    }
+
+    .name-highlight {
+      color: #fbbf24;
+      position: relative;
+      display: inline-block;
+      padding: 2px 3px;
+    }
+    .name-highlight::before {
+      content: "";
+      position: absolute;
+      inset: 3px -2px 0;
+      background: linear-gradient(90deg, rgba(251,191,36,0.25), rgba(248,113,113,0.4));
+      border-radius: 999px;
+      filter: blur(5px);
+      opacity: 0.9;
+      z-index: -1;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #d1d5db;
+      margin-bottom: 14px;
+    }
+
+    .typewriter {
+      min-height: 20px;
+      font-size: 13px;
+      color: #e5e7eb;
+      font-style: italic;
+      margin-bottom: 16px;
+      opacity: 0.95;
+    }
+
+    .message-block {
+      background: radial-gradient(circle at top left, rgba(37,99,235,0.26), rgba(15,23,42,0.9));
+      border-radius: 16px;
+      padding: 12px 13px;
+      border: 1px solid rgba(148,163,184,0.55);
+      box-shadow:
+        0 10px 25px rgba(15,23,42,0.9),
+        0 0 18px rgba(59,130,246,0.35);
+      font-size: 13px;
+      line-height: 1.7;
+      color: #e5e7eb;
+    }
+
+    .message-block p + p {
+      margin-top: 5px;
+    }
+
+    .footer-note {
+      margin-top: 16px;
+      font-size: 11px;
+      color: #9ca3af;
+    }
+
+    .btn-row {
+      margin-top: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .primary-btn {
+      position: relative;
+      padding: 9px 22px;
+      border-radius: 999px;
+      border: none;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      background: radial-gradient(circle at 10% 0, #f97316, #fb7185 45%, #6366f1 100%);
+      color: #f9fafb;
+      box-shadow:
+        0 0 0 1px rgba(253,186,116,0.6),
+        0 12px 28px rgba(59,130,246,0.8);
+      transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
+    }
+    .primary-btn:hover {
+      transform: translateY(-1px);
+      box-shadow:
+        0 0 0 1px rgba(253,186,116,0.7),
+        0 16px 40px rgba(59,130,246,0.95);
+      filter: brightness(1.03);
+    }
+    .primary-btn:active {
+      transform: translateY(0);
+      box-shadow:
+        0 0 0 1px rgba(253,186,116,0.6),
+        0 7px 18px rgba(15, 23, 42, 0.9);
+    }
+
+    .hint-text {
+      font-size: 11px;
+      color: #9ca3af;
+    }
+
+    /* 右侧 3D 风蛋糕 & 霓虹光环 */
+    .right-panel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+    }
+
+    .halo {
+      position: absolute;
+      inset: 30% -20%;
+      background: radial-gradient(circle at 50% 0, rgba(251,191,36,0.4), transparent 60%);
+      opacity: 0;
+      mix-blend-mode: screen;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+    .halo.active {
+      opacity: 1;
+    }
+
+    .cake-card {
+      position: relative;
+      width: 100%;
+      max-width: 320px;
+      height: 230px;
+      border-radius: 24px;
+      background:
+        radial-gradient(circle at 50% 0, rgba(251,113,133,0.46), transparent 65%),
+        radial-gradient(circle at 0 100%, rgba(59,130,246,0.34), transparent 65%),
+        rgba(15,23,42,0.96);
+      border: 1px solid rgba(191,219,254,0.45);
+      box-shadow:
+        0 18px 40px rgba(15,23,42,0.95),
+        0 0 30px rgba(96,165,250,0.55);
+      overflow: hidden;
+    }
+
+    .cake-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform-style: preserve-3d;
+      transition: transform 0.3s ease-out;
+    }
+
+    .cake-card:hover .cake-card-inner {
+      transform: rotateX(9deg) rotateY(-9deg) translateY(-3px);
+    }
+
+    .orbit-ring {
+      position: absolute;
+      width: 210px;
+      height: 210px;
+      border-radius: 999px;
+      border: 1px dashed rgba(191,219,254,0.45);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -52%) rotate(15deg);
+      opacity: 0.7;
+    }
+    .orbit-dot {
+      position: absolute;
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #fbbf24;
+      top: 6px;
+      left: 50%;
+      transform: translateX(-50%);
+      box-shadow: 0 0 16px rgba(251,191,36,0.8);
+      animation: orbit 8s linear infinite;
+    }
+    @keyframes orbit {
+      0%   { transform: translateX(-50%) rotate(0deg); }
+      100% { transform: translateX(-50%) rotate(360deg); }
+    }
+
+    .balloon {
+      position: absolute;
+      width: 40px;
+      height: 52px;
+      border-radius: 50% 50% 44% 44%;
+      background: #fb7185;
+      box-shadow: 0 10px 25px rgba(248, 113, 113, 0.4);
+      transform-origin: 50% 100%;
+      animation: float 4.4s ease-in-out infinite;
+    }
+    .balloon::after {
+      content: "";
+      position: absolute;
+      width: 2px;
+      height: 58px;
+      background: rgba(148,163,184,0.6);
+      top: 52px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .balloon:nth-child(1) {
+      top: 22px;
+      left: 18%;
+      background: #38bdf8;
+      animation-delay: -1.2s;
+    }
+    .balloon:nth-child(2) {
+      top: 16px;
+      right: 16%;
+      background: #f97316;
+      animation-delay: -.6s;
+    }
+
+    @keyframes float {
+      0%,100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-10px) rotate(-3deg); }
+    }
+
+    .cake {
+      position: relative;
+      width: 150px;
+      height: 118px;
+      transform: translateY(8px);
+    }
+
+    .cake-top {
+      position: absolute;
+      left: 10px;
+      right: 10px;
+      top: 32px;
+      height: 22px;
+      border-radius: 16px 16px 12px 12px;
+      background: #fef9c3;
+      box-shadow: 0 9px 0 #facc15, 0 14px 30px rgba(251,191,36,0.8);
+      overflow: hidden;
+    }
+
+    .cake-drip {
+      position: absolute;
+      width: 16px;
+      height: 20px;
+      background: #fb7185;
+      border-radius: 20px;
+      bottom: -8px;
+    }
+    .cake-drip:nth-child(1) { left: 14px; }
+    .cake-drip:nth-child(2) { left: 46px; height: 24px; }
+    .cake-drip:nth-child(3) { left: 80px; }
+    .cake-drip:nth-child(4) { left: 113px; height: 22px; }
+
+    .cake-body {
+      position: absolute;
+      left: 4px;
+      right: 4px;
+      top: 54px;
+      bottom: 20px;
+      border-radius: 16px;
+      background:
+        repeating-linear-gradient(
+          -45deg,
+          #fed7aa,
+          #fed7aa 10px,
+          #fecaca 10px,
+          #fecaca 20px
+        );
+      box-shadow: 0 10px 20px rgba(248,113,113,0.85);
+    }
+
+    .cake-body::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 20% 0, rgba(254,249,195,0.35), transparent 45%),
+        radial-gradient(circle at 80% 100%, rgba(254,202,202,0.3), transparent 50%);
+      mix-blend-mode: screen;
+      opacity: 0.9;
+    }
+
+    .cake-plate {
+      position: absolute;
+      left: -8px;
+      right: -8px;
+      bottom: 15px;
+      height: 16px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 50% 0, rgba(249,250,251,0.9), rgba(148,163,184,0.7));
+      box-shadow: 0 8px 18px rgba(15,23,42,0.9);
+    }
+
+    .candle {
+      position: absolute;
+      width: 11px;
+      height: 32px;
+      background: repeating-linear-gradient(
+        -45deg,
+        #60a5fa,
+        #60a5fa 4px,
+        #bfdbfe 4px,
+        #bfdbfe 8px
+      );
+      left: 50%;
+      top: 2px;
+      transform: translateX(-50%);
+      border-radius: 4px;
+      box-shadow: 0 0 10px rgba(96,165,250,0.8);
+    }
+
+    .flame {
+      position: absolute;
+      width: 14px;
+      height: 24px;
+      background:
+        radial-gradient(circle at 50% 20%, #fef9c3 0, #facc15 35%, transparent 70%);
+      border-radius: 50% 50% 50% 50%;
+      top: -22px;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: flame-flicker 1s ease-in-out infinite;
+      transform-origin: 50% 100%;
+      filter: drop-shadow(0 0 10px rgba(251,191,36,0.9));
+    }
+
+    @keyframes flame-flicker {
+      0%,100% { transform: translateX(-50%) scale(1); opacity: 1; }
+      50% { transform: translateX(-50%) scale(0.88); opacity: 0.7; }
+    }
+
+    .cake-caption {
+      position: absolute;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 12px;
+      color: #e5e7eb;
+      font-weight: 500;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.86);
+      box-shadow:
+        0 0 0 1px rgba(148,163,184,0.65),
+        0 10px 24px rgba(15,23,42,1);
+      white-space: nowrap;
+    }
+
+    canvas#confettiCanvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 3;
+    }
+  </style>
+</head>
+<body>
+  <div class="animated-bg"></div>
+  <div class="stars-layer"></div>
+  <canvas id="confettiCanvas"></canvas>
+
+  <div class="container">
+    <div class="card">
+      <div class="halo" id="halo"></div>
+
+      <div class="card-left">
+        <div class="badge">
+          <span class="badge-dot"></span>
+          <span>HAPPY BIRTHDAY</span>
+        </div>
+
+        <div class="pre-title">Tonight the stars are for you.</div>
+
+        <!-- 这里改名字：把“某某”改成想祝福的人 -->
+        <h1 class="title">
+          祝 <span class="name-highlight" id="nameText">刘老师</span> 生日快乐 ✨
+        </h1>
+
+        <p class="subtitle">
+          愿新的一岁，被世界温柔以待，也被自己好好珍惜。
+        </p>
+
+        <!-- 打字机效果的一行：可以改为你想说的“开场白” -->
+        <div class="typewriter" id="typewriter"></div>
+
+        <!-- 这里是主要祝福内容，可以自由修改 -->
+        <div class="message-block" id="messageBlock">
+          <p>愿你保持热爱，奔赴下一场山海；也能偶尔停下脚步，只为认真感受风吹过来的方向。</p>
+          <p>愿你在重要的人那里，被温柔相待；在不重要的事面前，学会从容放下。</p>
+          <p>这一年，愿你有清晰的目标，也有不设限的惊喜；拥有解决问题的能力，也保留对生活的期待。</p>
+        </div>
+
+        <div class="btn-row">
+          <button class="primary-btn" id="celebrateBtn">🎉 点亮这一秒的烟火</button>
+          <span class="hint-text">提示：把名字和祝福改成你的版本，就可以发给 TA 了。</span>
+        </div>
+
+        <div class="footer-note">
+          建议在电脑浏览器打开，并按 F11 进入全屏观赏效果更佳。
+        </div>
+      </div>
+
+      <div class="card-right">
+        <div class="right-panel">
+          <div class="cake-card">
+            <div class="cake-card-inner">
+              <div class="orbit-ring">
+                <div class="orbit-dot"></div>
+              </div>
+              <div class="balloon"></div>
+              <div class="balloon"></div>
+
+              <div class="cake">
+                <div class="cake-top">
+                  <div class="cake-drip"></div>
+                  <div class="cake-drip"></div>
+                  <div class="cake-drip"></div>
+                  <div class="cake-drip"></div>
+                </div>
+                <div class="cake-body"></div>
+                <div class="cake-plate"></div>
+                <div class="candle">
+                  <div class="flame"></div>
+                </div>
+              </div>
+
+              <div class="cake-caption">吹灭蜡烛之前，记得认真许一个愿望</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ========== 打字机效果 ==========
+    (function () {
+      // 这里可以改成你想要的一句“开场白”
+      const text =
+        "在这一小段光阴里，希望你只需要一件事：好好做自己。";
+      const el = document.getElementById("typewriter");
+      if (!el) return;
+      let idx = 0;
+
+      function type() {
+        if (idx <= text.length) {
+          el.textContent = text.slice(0, idx);
+          idx++;
+          setTimeout(type, 60);
+        }
+      }
+      type();
+    })();
+
+    // ========== 彩带动画（升级版） ==========
+    (function () {
+      const canvas = document.getElementById("confettiCanvas");
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      let width = window.innerWidth;
+      let height = window.innerHeight;
+      let pieces = [];
+      let animationId = null;
+
+      const colors = [
+        "#f97373",
+        "#facc15",
+        "#4ade80",
+        "#60a5fa",
+        "#a855f7",
+        "#fb7185",
+        "#f97316"
+      ];
+
+      function resizeCanvas() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = width;
+        canvas.height = height;
+      }
+
+      window.addEventListener("resize", resizeCanvas);
+      resizeCanvas();
+
+      function createPieces(count) {
+        pieces = [];
+        for (let i = 0; i < count; i++) {
+          pieces.push({
+            x: Math.random() * width,
+            y: Math.random() * -height,
+            w: 6 + Math.random() * 7,
+            h: 10 + Math.random() * 12,
+            color: colors[(Math.random() * colors.length) | 0],
+            speedX: -2 + Math.random() * 4,
+            speedY: 2.5 + Math.random() * 4.5,
+            rotation: Math.random() * Math.PI * 2,
+            rotationSpeed: -0.2 + Math.random() * 0.4
+          });
+        }
+      }
+
+      function renderFade(durationMs) {
+        const start = performance.now();
+
+        function frame(now) {
+          const elapsed = now - start;
+          const fade = Math.max(0, 1 - elapsed / durationMs);
+          ctx.clearRect(0, 0, width, height);
+
+          for (const p of pieces) {
+            ctx.save();
+            ctx.globalAlpha = fade;
+            ctx.translate(p.x, p.y);
+            ctx.rotate(p.rotation);
+            ctx.fillStyle = p.color;
+            ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+            ctx.restore();
+
+            p.x += p.speedX;
+            p.y += p.speedY;
+            p.rotation += p.rotationSpeed;
+
+            if (p.y - p.h > height) {
+              p.y = -20;
+              p.x = Math.random() * width;
+            }
+          }
+
+          if (fade > 0.03) {
+            animationId = requestAnimationFrame(frame);
+          } else {
+            ctx.clearRect(0, 0, width, height);
+          }
+        }
+
+        animationId = requestAnimationFrame(frame);
+      }
+
+      function fireConfetti(durationMs) {
+        createPieces(220);
+        if (animationId) {
+          cancelAnimationFrame(animationId);
+        }
+        renderFade(durationMs);
+      }
+
+      // 页面加载时自动放一次
+      window.addEventListener("load", () => {
+        fireConfetti(4500);
+      });
+
+      // 点击按钮再放一次 + 光环效果
+      const btn = document.getElementById("celebrateBtn");
+      const halo = document.getElementById("halo");
+      if (btn) {
+        btn.addEventListener("click", () => {
+          fireConfetti(4500);
+          if (halo) {
+            halo.classList.add("active");
+            setTimeout(() => halo.classList.remove("active"), 1400);
+          }
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
