@@ -19,7 +19,7 @@
       background: radial-gradient(circle at top, #0f172a 0, #020617 45%, #020617 100%);
     }
 
-    /* 动态渐变背景（酷炫一点） */
+    /* 动态渐变背景 */
     .animated-bg {
       position: fixed;
       inset: -20%;
@@ -171,7 +171,15 @@
     .subtitle {
       font-size: 14px;
       color: #d1d5db;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
+    }
+
+    .btn-row-top {
+      margin-bottom: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
     }
 
     .typewriter {
@@ -200,18 +208,83 @@
       margin-top: 5px;
     }
 
-    .footer-note {
-      margin-top: 16px;
-      font-size: 11px;
+    /* 互动小面板：只保留随机祝福 */
+    .mini-panel {
+      margin-top: 14px;
+      background: rgba(15,23,42,0.85);
+      border-radius: 16px;
+      border: 1px solid rgba(148,163,184,0.7);
+      padding: 10px 12px;
+      font-size: 12px;
+      color: #e5e7eb;
+      box-shadow: 0 10px 26px rgba(15,23,42,0.9);
+    }
+
+    .mini-panel-header {
+      font-weight: 600;
+      font-size: 12px;
+      color: #c4b5fd;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .mini-panel-header::before {
+      content: "✦";
+      font-size: 10px;
+      color: #fbbf24;
+    }
+
+    .mini-panel-body {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .mini-field label {
       color: #9ca3af;
     }
 
-    .btn-row {
-      margin-top: 16px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
+    .mini-btn {
+      border-radius: 999px;
+      border: none;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      background: linear-gradient(135deg, #f97316, #fb7185);
+      color: #f9fafb;
+      box-shadow: 0 6px 14px rgba(248,113,113,0.7);
+      white-space: nowrap;
+      margin-top: 4px;
+      transition: transform .1s ease, box-shadow .1s ease, filter .1s ease;
+    }
+
+    .mini-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 9px 20px rgba(248,113,113,0.9);
+      filter: brightness(1.04);
+    }
+    .mini-btn:active {
+      transform: translateY(0);
+      box-shadow: 0 4px 10px rgba(15,23,42,0.9);
+    }
+
+    /* 抽到的祝福：字体更大、更亮、有颜色 */
+    .mini-blessing {
+      margin-top: 4px;
+      font-size: 13px;
+      color: #fbbf24;
+      font-weight: 600;
+      min-height: 18px;
+      text-shadow: 0 0 8px rgba(251,191,36,0.7);
+    }
+
+    .footer-note {
+      margin-top: 14px;
+      font-size: 11px;
+      color: #9ca3af;
     }
 
     .primary-btn {
@@ -241,11 +314,6 @@
       box-shadow:
         0 0 0 1px rgba(253,186,116,0.6),
         0 7px 18px rgba(15, 23, 42, 0.9);
-    }
-
-    .hint-text {
-      font-size: 11px;
-      color: #9ca3af;
     }
 
     /* 右侧 3D 风蛋糕 & 霓虹光环 */
@@ -296,6 +364,7 @@
       justify-content: center;
       transform-style: preserve-3d;
       transition: transform 0.3s ease-out;
+      cursor: pointer; /* 整个卡片区域都提示可点击 */
     }
 
     .cake-card:hover .cake-card-inner {
@@ -458,24 +527,33 @@
       box-shadow: 0 0 10px rgba(96,165,250,0.8);
     }
 
+    /* 火焰：加大、加长，并带开关动画 */
     .flame {
       position: absolute;
-      width: 14px;
-      height: 24px;
+      width: 18px;
+      height: 32px;
       background:
-        radial-gradient(circle at 50% 20%, #fef9c3 0, #facc15 35%, transparent 70%);
-      border-radius: 50% 50% 50% 50%;
-      top: -22px;
+        radial-gradient(circle at 50% 18%, #fefce8 0, #facc15 25%, #fb923c 55%, transparent 75%);
+      border-radius: 50% 50% 55% 55%;
+      top: -30px;
       left: 50%;
-      transform: translateX(-50%);
+      transform: translateX(-50%) scale(1);
       animation: flame-flicker 1s ease-in-out infinite;
       transform-origin: 50% 100%;
-      filter: drop-shadow(0 0 10px rgba(251,191,36,0.9));
+      filter: drop-shadow(0 0 14px rgba(251,191,36,0.95));
+      transition: opacity .25s ease, transform .25s ease;
+    }
+
+    .flame.off {
+      opacity: 0;
+      animation: none;
+      transform: translateX(-50%) translateY(-6px) scale(0.3);
+      filter: none;
     }
 
     @keyframes flame-flicker {
       0%,100% { transform: translateX(-50%) scale(1); opacity: 1; }
-      50% { transform: translateX(-50%) scale(0.88); opacity: 0.7; }
+      50% { transform: translateX(-50%) scale(0.85); opacity: 0.75; }
     }
 
     .cake-caption {
@@ -495,11 +573,99 @@
       white-space: nowrap;
     }
 
+    /* 日历卡片 */
+    .calendar-card {
+      width: 100%;
+      max-width: 320px;
+      border-radius: 18px;
+      background: rgba(15,23,42,0.95);
+      border: 1px solid rgba(148,163,184,0.7);
+      box-shadow:
+        0 14px 30px rgba(15,23,42,0.95),
+        0 0 18px rgba(56,189,248,0.4);
+      padding: 8px 10px 10px;
+    }
+
+    .calendar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+      font-size: 12px;
+      color: #e5e7eb;
+    }
+
+    .calendar-title {
+      font-weight: 600;
+    }
+
+    .calendar-tag {
+      font-size: 11px;
+      color: #facc15;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 3px;
+      margin-top: 2px;
+    }
+
+    .calendar-cell {
+      text-align: center;
+      font-size: 11px;
+      padding: 3px 0;
+      border-radius: 8px;
+    }
+
+    .calendar-weekday {
+      font-weight: 600;
+      color: #e5e7eb;
+    }
+
+    .calendar-blank {
+      opacity: 0;
+    }
+
+    .calendar-day {
+      color: #9ca3af;
+    }
+
+    .calendar-day.is-today {
+      border: 1px solid rgba(129,140,248,0.85);
+      color: #e5e7eb;
+      background: rgba(30,64,175,0.8);
+    }
+
+    .calendar-day.is-birthday {
+      background: linear-gradient(135deg, #fbbf24, #fb7185);
+      color: #111827;
+      font-weight: 700;
+      box-shadow: 0 0 0 1px rgba(251,191,36,0.8), 0 0 16px rgba(251,191,36,0.9);
+    }
+
     canvas#confettiCanvas {
       position: fixed;
       inset: 0;
       pointer-events: none;
       z-index: 3;
+    }
+
+    /* 飘花元素 */
+    .petal {
+      position: fixed;
+      font-size: 18px;
+      pointer-events: none;
+      z-index: 3;
+      animation: petalFloat 2.5s ease-out forwards;
+    }
+
+    @keyframes petalFloat {
+      0% { transform: translate3d(0, 0, 0) rotate(0deg); opacity: 1; }
+      100% { transform: translate3d(0, -140px, 0) rotate(40deg); opacity: 0; }
     }
   </style>
 </head>
@@ -520,7 +686,6 @@
 
         <div class="pre-title">Tonight the stars are for you.</div>
 
-        <!-- 这里改名字：把“某某”改成想祝福的人 -->
         <h1 class="title">
           祝 <span class="name-highlight" id="nameText">刘老师</span> 生日快乐 ✨
         </h1>
@@ -529,19 +694,27 @@
           愿新的一岁，被世界温柔以待，也被自己好好珍惜。
         </p>
 
-        <!-- 打字机效果的一行：可以改为你想说的“开场白” -->
-        <div class="typewriter" id="typewriter"></div>
-
-        <!-- 这里是主要祝福内容，可以自由修改 -->
-        <div class="message-block" id="messageBlock">
-          <p>愿你保持热爱，奔赴下一场山海；也能偶尔停下脚步，只为认真感受风吹过来的方向。</p>
-          <p>愿你在重要的人那里，被温柔相待；在不重要的事面前，学会从容放下。</p>
-          <p>这一年，愿你有清晰的目标，也有不设限的惊喜；拥有解决问题的能力，也保留对生活的期待。</p>
+        <div class="btn-row-top">
+          <button class="primary-btn" id="celebrateBtn">🎉 点亮这一秒的烟火</button>
         </div>
 
-        <div class="btn-row">
-          <button class="primary-btn" id="celebrateBtn">🎉 点亮这一秒的烟火</button>
-          <span class="hint-text">提示：把名字和祝福改成你的版本，就可以发给 TA 了。</span>
+        <div class="typewriter" id="typewriter"></div>
+
+        <div class="message-block" id="messageBlock">
+          <p>愿您保持热爱，奔赴下一场山海；也能偶尔停下脚步，只为认真感受风吹过来的方向。</p>
+          <p>愿您在重要的人那里，被温柔相待；在不重要的事面前，学会从容放下。</p>
+          <p>这一年，愿您有清晰的目标，也不设限于眼前；既拥有解决问题的能力，也保留对生活的期待。</p>
+        </div>
+
+        <div class="mini-panel">
+          <div class="mini-panel-header">小小互动</div>
+          <div class="mini-panel-body">
+            <div class="mini-field">
+              <label>随机解锁一条今日专属祝福：</label>
+              <button class="mini-btn" id="randomBlessingBtn">✨ 抽一条</button>
+              <div class="mini-blessing" id="randomBlessingText">点击“抽一条”试试运气。</div>
+            </div>
+          </div>
         </div>
 
         <div class="footer-note">
@@ -552,7 +725,8 @@
       <div class="card-right">
         <div class="right-panel">
           <div class="cake-card">
-            <div class="cake-card-inner">
+            <!-- 整个卡片内容区域可点击 -->
+            <div class="cake-card-inner" id="cakeInteractive">
               <div class="orbit-ring">
                 <div class="orbit-dot"></div>
               </div>
@@ -568,13 +742,22 @@
                 </div>
                 <div class="cake-body"></div>
                 <div class="cake-plate"></div>
-                <div class="candle">
-                  <div class="flame"></div>
+                <div class="candle" id="candle">
+                  <div class="flame" id="flame"></div>
                 </div>
               </div>
 
-              <div class="cake-caption">吹灭蜡烛之前，记得认真许一个愿望</div>
+              <div class="cake-caption" id="cakeCaption">轻点蛋糕、蜡烛或气球，模拟吹蜡烛～</div>
             </div>
+          </div>
+
+          <!-- 生日日历（11 月 23 日） -->
+          <div class="calendar-card">
+            <div class="calendar-header">
+              <div class="calendar-title" id="calendarMonth">生日月</div>
+              <div class="calendar-tag">🎂 生日日历</div>
+            </div>
+            <div class="calendar-grid" id="calendarGrid"></div>
           </div>
         </div>
       </div>
@@ -584,9 +767,8 @@
   <script>
     // ========== 打字机效果 ==========
     (function () {
-      // 这里可以改成你想要的一句“开场白”
       const text =
-        "在这一小段光阴里，希望你只需要一件事：好好做自己。";
+        "在这一小段光阴里，希望您只需要一件事：好好做自己。";
       const el = document.getElementById("typewriter");
       if (!el) return;
       let idx = 0;
@@ -601,7 +783,7 @@
       type();
     })();
 
-    // ========== 彩带动画（升级版） ==========
+    // ========== 彩带动画 + 飘花 ==========
     (function () {
       const canvas = document.getElementById("confettiCanvas");
       if (!canvas) return;
@@ -685,12 +867,32 @@
         animationId = requestAnimationFrame(frame);
       }
 
+      function spawnPetals() {
+        const emojis = ["🌸", "🌹", "🌼", "🎂", "🎁"];
+        const count = 10;
+        for (let i = 0; i < count; i++) {
+          const span = document.createElement("span");
+          span.className = "petal";
+          span.textContent = emojis[(Math.random() * emojis.length) | 0];
+          const startX = Math.random() * window.innerWidth;
+          const startY = window.innerHeight - 40 + Math.random() * 20;
+          span.style.left = startX + "px";
+          span.style.top = startY + "px";
+          span.style.animationDelay = (Math.random() * 0.8).toFixed(2) + "s";
+          document.body.appendChild(span);
+          setTimeout(() => {
+            span.remove();
+          }, 2600);
+        }
+      }
+
       function fireConfetti(durationMs) {
         createPieces(220);
         if (animationId) {
           cancelAnimationFrame(animationId);
         }
         renderFade(durationMs);
+        spawnPetals();
       }
 
       // 页面加载时自动放一次
@@ -709,6 +911,104 @@
             setTimeout(() => halo.classList.remove("active"), 1400);
           }
         });
+      }
+    })();
+
+    // ========== 蛋糕蜡烛交互：整张卡片的图片区域都可点击 ==========
+    (function () {
+      const interactiveArea = document.getElementById("cakeInteractive");
+      const flame = document.getElementById("flame");
+      const caption = document.getElementById("cakeCaption");
+
+      if (!interactiveArea || !flame) return;
+
+      let isOn = true;
+
+      interactiveArea.addEventListener("click", () => {
+        isOn = !isOn;
+        if (isOn) {
+          flame.classList.remove("off");
+          if (caption) caption.textContent = "愿您新的一岁，光亮如初。";
+        } else {
+          flame.classList.add("off");
+          if (caption) caption.textContent = "蜡烛已经吹灭，再点一下重新点亮～";
+        }
+      });
+    })();
+
+    // ========== 互动区：随机祝福 ==========
+    (function () {
+      const blessingBtn = document.getElementById("randomBlessingBtn");
+      const blessingText = document.getElementById("randomBlessingText");
+
+      const blessings = [
+        "愿您想要的都拥有，得不到的都释怀。",
+        "愿您眼里有光、心中有海，走过山海也不失少年姿态。",
+        "愿您既有追梦的勇气，也有享受当下的小确幸。",
+        "愿所有的艰辛都有回响，所有的努力都不被辜负。",
+        "愿您永远保持对世界的好奇，对生活的热情。",
+        "愿您在被需要中感受价值，也在独处中和自己和解。",
+        "愿平安喜乐常伴您左右，万事顺意，事事有回应。"
+      ];
+
+      if (blessingBtn && blessingText) {
+        blessingBtn.addEventListener("click", () => {
+          const idx = Math.floor(Math.random() * blessings.length);
+          blessingText.textContent = blessings[idx];
+        });
+      }
+    })();
+
+    // ========== 生日日历（11 月 23 日） ==========
+    (function () {
+      const BIRTHDAY_MONTH = 11;
+      const BIRTHDAY_DAY = 23;
+
+      const calendarMonthEl = document.getElementById("calendarMonth");
+      const calendarGridEl = document.getElementById("calendarGrid");
+      if (!calendarMonthEl || !calendarGridEl) return;
+
+      const now = new Date();
+      const year = now.getFullYear();
+      const monthIndex = BIRTHDAY_MONTH - 1;
+
+      calendarMonthEl.textContent = `${year} 年 ${BIRTHDAY_MONTH} 月`;
+
+      const weekdayLabels = ["日","一","二","三","四","五","六"];
+
+      weekdayLabels.forEach(label => {
+        const cell = document.createElement("div");
+        cell.className = "calendar-cell calendar-weekday";
+        cell.textContent = label;
+        calendarGridEl.appendChild(cell);
+      });
+
+      const firstDay = new Date(year, monthIndex, 1);
+      const startWeekday = firstDay.getDay();
+      const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
+
+      for (let i = 0; i < startWeekday; i++) {
+        const blank = document.createElement("div");
+        blank.className = "calendar-cell calendar-blank";
+        calendarGridEl.appendChild(blank);
+      }
+
+      for (let d = 1; d <= daysInMonth; d++) {
+        const cell = document.createElement("div");
+        cell.className = "calendar-cell calendar-day";
+        cell.textContent = d;
+        const isBirthday = (d === BIRTHDAY_DAY);
+        const isToday =
+          year === now.getFullYear() &&
+          monthIndex === now.getMonth() &&
+          d === now.getDate();
+
+        if (isBirthday) {
+          cell.classList.add("is-birthday");
+        } else if (isToday) {
+          cell.classList.add("is-today");
+        }
+        calendarGridEl.appendChild(cell);
       }
     })();
   </script>
