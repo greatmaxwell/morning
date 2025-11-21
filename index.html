@@ -149,23 +149,8 @@
       text-shadow:
         0 0 18px rgba(96,165,250,0.7),
         0 0 38px rgba(59,130,246,0.7);
-    }
-
-    .name-highlight {
-      color: #fbbf24;
-      position: relative;
-      display: inline-block;
-      padding: 2px 3px;
-    }
-    .name-highlight::before {
-      content: "";
-      position: absolute;
-      inset: 3px -2px 0;
-      background: linear-gradient(90deg, rgba(251,191,36,0.25), rgba(248,113,113,0.4));
-      border-radius: 999px;
-      filter: blur(5px);
-      opacity: 0.9;
-      z-index: -1;
+      /* 整句统一颜色 */
+      color: #fefce8;
     }
 
     .subtitle {
@@ -686,9 +671,8 @@
 
         <div class="pre-title">Tonight the stars are for you.</div>
 
-        <h1 class="title">
-          祝 <span class="name-highlight" id="nameText">刘老师</span> 生日快乐 ✨
-        </h1>
+        <!-- 整句同一风格，作为一句话 -->
+        <h1 class="title" id="nameText">祝刘老师生日快乐 ✨</h1>
 
         <p class="subtitle">
           愿新的一岁，被世界温柔以待，也被自己好好珍惜。
